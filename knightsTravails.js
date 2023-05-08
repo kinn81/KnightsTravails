@@ -73,24 +73,22 @@ function knightMoves(start, end) {
       );
       break;
     }
-    //Determine all possible moves, mark as visited and add to the queue.
-    for (let i = 0; i < 8; i++) {
-      let nextX = currPos.location[0] + moveOffsetX[i];
-      let nextY = currPos.location[1] + moveOffsetY[i];
-      if (nextX < 0 || nextX > 7 || nextY < 0 || nextY > 7) continue; //Skip moves outside the board
-      let nextMv = board[nextX][nextY];
-      if (nextMv.visited == true) {
-        currPos.neighbours.push(nextMv);
+
+    //Determine all neighbouring movs, mark as visited and add to the queue.
+    let neighbours = getNeighbours(currPos);
+    for (let i = 0; i <= neighbours.length - 1; i++) {
+      if (neighbours[i].visited == true) {
+        currPos.neighbours.push(neighbours[i]);
         continue;
       }
-      nextMv.visited = true;
-      nextMv.distance = currPos.distance + 1;
-      currPos.neighbours.push(nextMv);
-      queue.push(nextMv);
+      neighbours[i].visited = true;
+      neighbours[i].distance = currPos.distance + 1;
+      currPos.neighbours.push(neighbours[i]);
+      queue.push(neighbours[i]);
     }
   }
 
-  //Keep a track of the path from the end back to the start
+  //Work out the path of moves between start and end
   let path = [];
   path.push(finalMove);
   let nextMv = finalMove;
